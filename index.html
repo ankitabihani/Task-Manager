@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang= "en">
+<head>
+<meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        .completed {
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+        li{
+            cursor: pointer;
+        }
+    </style>
+
+<script type="text/javascript">
+
+window.addEventListener("DOMContentLoaded",init);
+function init(){
+ var btnAddTask = document.getElementByID("btnAddTask");
+btnAddTask.addEventListener("click",onBtnAddTaskClick);
+
+var btnRemoveCompleted = document.getElementByID("btnRemoveCompleted");
+btnRemoveCompleted.addEventListener("click",onBtnRemoveCompleted);
+
+for (var i = 0; i < window.localStorage.length; i++)
+{
+	var taskID = window.localStorage.key(i);
+	var taskName = window.localStorage.getItem(taskID);
+	addNewTaskToList(taskID,taskName)
+
+}
+}
+
+function onBtnAddTaskClick(){
+	taskName = document.getElementByID("txtTask").value;
+	taskID = new Date().getTime().toString();
+	addNewTaskToList(taskID,taskName);
+	window.localStorage.setItem(taskID,taskName);
+}
+
+function addNewTaskToList(taskID, taskName){
+	var newTaskItem = document.createElement("li");
+	newTaskItem.innerHTML = taskName;
+	newTaskItem.setAttribute("task-id",taskID);
+	newTaskItem.addEventListener("onTaskItemClick");
+	var olList = document.getElementByID("olList");
+	olList.appendChild(newTaskItem);
+
+}
+
+function onBtnRemoveCompleted(){
+
+	var olTaskList = document.getElementByID("olList");
+	var TaskItems = olTaskList.children;
+	for (var i = TaskItems.length; i>0 ; i--){
+		if (TaskItems[i].contains("completed")){
+			var taskID = TaskItems[i].getAttribute("task-id");
+			window.localStorage.removeItem(taskID);
+			taskItems[i].remove();
+
+		}
+	}
+}
+</script>
+
+</head>
+<body>
+	<h1> Task Manager by Ankita Bihani</h1>
+
+	<label for ="task"> Task: </label>
+	<input type = "text" name ="" id ="TxtTask">
+	<input type = "button" value ="add Task" id = "btnAddTask">
+	<input type = "button" value ="remove Task" id = "btnRemoveCompleted">
+	<ol id="olTaskList">
+        
+    </ol>
+</body>
+</html>
