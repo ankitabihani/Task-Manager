@@ -19,23 +19,23 @@
 
 window.addEventListener("DOMContentLoaded",init);
 function init(){
- var btnAddTask = document.getElementByID("btnAddTask");
+ var btnAddTask = document.getElementById("btnAddTask");
 btnAddTask.addEventListener("click",onBtnAddTaskClick);
 
-var btnRemoveCompleted = document.getElementByID("btnRemoveCompleted");
+var btnRemoveCompleted = document.getElementById("btnRemoveCompleted");
 btnRemoveCompleted.addEventListener("click",onBtnRemoveCompleted);
 
 for (var i = 0; i < window.localStorage.length; i++)
 {
-	var taskID = window.localStorage.key(i);
-	var taskName = window.localStorage.getItem(taskID);
+	var taskId = window.localStorage.key(i);
+	var taskName = window.localStorage.getItem(taskId);
 	addNewTaskToList(taskID,taskName)
 
 }
 }
 
 function onBtnAddTaskClick(){
-	taskName = document.getElementByID("txtTask").value;
+	taskName = document.getElementById("txtTask").value;
 	taskID = new Date().getTime().toString();
 	addNewTaskToList(taskID,taskName);
 	window.localStorage.setItem(taskID,taskName);
@@ -44,21 +44,27 @@ function onBtnAddTaskClick(){
 function addNewTaskToList(taskID, taskName){
 	var newTaskItem = document.createElement("li");
 	newTaskItem.innerHTML = taskName;
+    newTaskItem.addEventListener("click",onTaskItemClick);
 	newTaskItem.setAttribute("task-id",taskID);
-	newTaskItem.addEventListener("onTaskItemClick");
-	var olList = document.getElementByID("olList");
-	olList.appendChild(newTaskItem);
+	
+	var olTaskList = document.getElementById("olTaskList");
+	olTaskList.appendChild(newTaskItem);
 
 }
 
+function onTaskItemClick(){
+            this.classList.toggle("completed");
+        }
+
+
 function onBtnRemoveCompleted(){
 
-	var olTaskList = document.getElementByID("olList");
-	var TaskItems = olTaskList.children;
-	for (var i = TaskItems.length; i>0 ; i--){
-		if (TaskItems[i].contains("completed")){
-			var taskID = TaskItems[i].getAttribute("task-id");
-			window.localStorage.removeItem(taskID);
+	var olTaskList = document.getElementById("olTaskList");
+	var taskItems = olTaskList.children;
+	for (var i = taskItems.length-1; i>=0 ; i--){
+		if (taskItems[i].classList.contains("completed")){
+			var taskId = taskItems[i].getAttribute("task-id");
+			window.localStorage.removeItem(taskId);
 			taskItems[i].remove();
 
 		}
@@ -68,13 +74,13 @@ function onBtnRemoveCompleted(){
 
 </head>
 <body>
-	<h1> Task Manager by Ankita Bihani</h1>
-
-	<label for ="task"> Task: </label>
-	<input type = "text" name ="" id ="TxtTask">
-	<input type = "button" value ="add Task" id = "btnAddTask">
-	<input type = "button" value ="remove Task" id = "btnRemoveCompleted">
-	<ol id="olTaskList">
+    <h1>Task Manager</h1>
+    <hr>
+    <label for="">Task :</label>
+    <input type="text" name="" id="txtTask">
+    <input type="button" value="Add Task" id="btnAddTask">
+    <input type="button" value="Remove Completed" id="btnRemoveCompleted">
+    <ol id="olTaskList">
         
     </ol>
 </body>
